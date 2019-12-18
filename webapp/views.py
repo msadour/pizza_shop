@@ -8,21 +8,21 @@ from .forms import AuthenticationForm, CreateCustomerForm
 
 context = {}
 
-# def init_database():
-#     if platform.system() in ['Linux', 'Darwin']:
-#         slash = '/'
-#     else:
-#         slash = '\\'
-#
-#     path_pizzas_files = os.getcwd() + slash + "pizzas.json"
-#     pizzas = json.load(open(path_pizzas_files))['pizzas']
-#     for pizza in pizzas:
-#         new_pizza = Pizza(**pizza)
-#         new_pizza.save()
+def init_database():
+    if platform.system() in ['Linux', 'Darwin']:
+        slash = '/'
+    else:
+        slash = '\\'
+
+    path_pizzas_files = os.getcwd() + slash + "webapp" + slash + "pizzas.json"
+    pizzas = json.load(open(path_pizzas_files))['pizzas']
+    for pizza in pizzas:
+        new_pizza = Pizza(**pizza)
+        new_pizza.save()
 
 def welcome(request, errors=[]):
-    # if len(Pizza.objects.all()) == 0:
-    #     init_database()
+    if len(Pizza.objects.all()) == 0:
+        init_database()
     context['errors'] = errors
     context['form_username'] = AuthenticationForm()
     context['form_create_customer'] = CreateCustomerForm()
