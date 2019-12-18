@@ -8,6 +8,19 @@ class Customer(models.Model):
     email = models.CharField(max_length=200)
     telephone = models.CharField(max_length=200)
 
+    def get_orders(self, mine=False, filter=None):
+        if mine:
+            return self.order_customer.all()
+        else:
+            if filter:
+                if filter['criteria'] == 'name':
+                    return Order.objects.filter(customer__name=filter['key_word'])
+                elif filter['criteria'] == 'email':
+                    return Order.objects.filter(customer__email=filter['key_word'])
+                else:
+                    return Order.objects.all()
+            return Order.objects.all()
+
 
 class Pizza(models.Model):
     type = models.CharField(max_length=200)

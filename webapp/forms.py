@@ -13,6 +13,12 @@ MARGHERITA_SIZES = [
     ('Medium', 'Medium')
 ]
 
+CRITERIA = [
+    ('name', 'name'),
+    ('email', 'email'),
+    ('all', 'all')
+]
+
 class PizzaForm(forms.Form):
     type = forms.CharField(label="", max_length=30, required=False)
     size = forms.ChoiceField( required=False, choices=SIZES)
@@ -35,3 +41,7 @@ class CreateCustomerForm(ModelForm):
     class Meta:
         model = Customer
         fields = ['username', 'name', 'email', 'telephone']
+
+class FilterOrderForm(forms.Form):
+    key_word = forms.CharField(label="", max_length=30, required=False)
+    criteria = forms.ChoiceField(required=False, choices=CRITERIA)
