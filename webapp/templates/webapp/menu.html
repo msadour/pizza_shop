@@ -1,0 +1,17 @@
+
+{% if context.current_user %}
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand">Administration debtor</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/home">Home</a></li>
+          <li><a href="/debtors">Debtors</a></li>
+          <li><a href="/invoices">Invoices</a></li>
+            <li><a href="/administration">Administration</a></li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+{% endif %}

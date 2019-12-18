@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza shop</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+</head>
+<body>
+
+    {% include 'webapp/menu.html' %}
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

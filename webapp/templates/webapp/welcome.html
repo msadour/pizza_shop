@@ -1,0 +1,55 @@
+{% extends 'webapp/base.html' %}
+{% block content %}
+    <br />
+        <ul>
+            {% for error in errors %}
+                <li>{{error}}</li>
+            {% endfor %}
+        </ul>
+
+    <br />
+
+    <p>Have you an account? Please enter your username : </p>
+    <form action="/get_or_create_customer/get" method="post" id="authentication_form">
+        {% csrf_token %}
+        <table >
+            {% for field in form_username %}
+            <tbody>
+            <th>
+              <tr>
+                <label for="{{ field.label }}" style="display:inline-block;vertical-align:middle">{{ field.label_tag }}</label>
+              </tr>
+              <tr>
+                {{ field }}
+              </tr>
+            </th>
+            {% endfor %}
+            </tbody>
+            <input type="submit" value="Create" />
+        </table>
+    </form>
+
+<br /><br />
+
+<p>Are you new? Please feel the following form to create your account : </p>
+
+<form action="/get_or_create_customer/create" method="post" id="signup_form">
+        {% csrf_token %}
+        <table >
+            {% for field in form_create_customer %}
+                <tbody>
+                    <th>
+                      <tr>
+                        <label for="{{ field.label }}" style="display:inline-block;vertical-align:middle">{{ field.label_tag }}</label>
+                      </tr>
+                      <tr>
+                        {{ field }}
+                      </tr>
+                    </th>
+                    <br />
+            {% endfor %}
+            </tbody>
+            <input type="submit" value="Create" />
+        </table>
+    </form>
+{% endblock %}
