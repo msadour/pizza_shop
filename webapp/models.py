@@ -8,8 +8,6 @@ class Customer(models.Model):
     email = models.CharField(max_length=200)
     telephone = models.CharField(max_length=200)
 
-    def orders(self):
-        return self.order_set.all()
 
 class Pizza(models.Model):
     type = models.CharField(max_length=200)

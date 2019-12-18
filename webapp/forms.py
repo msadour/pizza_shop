@@ -17,11 +17,13 @@ class PizzaForm(forms.Form):
     type = forms.CharField(label="", max_length=30, required=False)
     size = forms.ChoiceField( required=False, choices=SIZES)
 
-    def __init__(self, pizza, *args, **kwargs):
+    def __init__(self,pizza=None, *args, **kwargs):
         super(PizzaForm, self).__init__(*args, **kwargs)
-        self.fields['type'].initial = 'pizza'
-        if pizza == 'margherita':
-            self.fields['size'].attrs['choices'] = MARGHERITA_SIZES
+        if pizza:
+            self.fields['type'].initial = pizza.type
+            self.fields['type'].widget.attrs['readonly'] = True
+            if pizza.type == 'Margherita':
+                self.fields['size'].choices = MARGHERITA_SIZES
 
 class AuthenticationForm(forms.Form):
     username = forms.CharField(label="", max_length=30, required=False)

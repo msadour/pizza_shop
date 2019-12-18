@@ -4,9 +4,16 @@ import platform
 
 from django.shortcuts import render
 from .models import Customer, Pizza, Order
-from .forms import AuthenticationForm, CreateCustomerForm
+from .forms import AuthenticationForm, CreateCustomerForm, PizzaForm
 
 context = {}
+#
+# def check_login(method):
+#     def wrapper(request, *args, **kwargs):
+#         if "current_user" not in context.keys():
+#             return welcome(request)
+#         return method(request, *args, **kwargs)
+#     return wrapper
 
 def init_database():
     if platform.system() in ['Linux', 'Darwin']:
@@ -52,16 +59,26 @@ def get_or_create_customer(request, action=""):
         return list_pizza(request)
 
 def list_pizza(request):
-    context['pizzas'] = Pizza.objects.all()
+    context['pizza_forms'] = [PizzaForm(pizza) for pizza in Pizza.objects.all()]
     return render(request, 'webapp/pizzas.html', context)
 
 def order_pizza(request):
-    pass
+    if request.method == "POST":
+        form = PizzaForm(None, request.POST)
+        if form.is_valid():
+            pizza = Pizza.objects.get(type=form.cleaned_data['type'])
+            size = form.cleaned_data['size']
+            # import pdb; pdb.set_trace()
+            new_order = Order(pizza=pizza, size=size, customer=context['current_user'])
+            new_order.save()
+        return orders(request, 'mine')
 
-def my_orders(request):
-    pass
+def orders(request, mine=None):
+    if mine:
+        context['orders'] = context['current_user'].order_customer.all().order_by('date')
+    else:
+        context['orders'] = Order.objects.all()
+    return render(request, 'webapp/my_orders.html', context)
 
-def all_orders(request):
-    pass
 
 

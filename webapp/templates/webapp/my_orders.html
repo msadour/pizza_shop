@@ -1,4 +1,23 @@
 {% extends 'webapp/base.html' %}
 {% block content %}
-    my orders
+    <table border="1" style="width: 50%">
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Telephone</th>
+        </tr>
+        {% for order in orders %}
+            <tr>
+                <th>{{order.date}}</th>
+                <th>{{order.pizza.type}}</th>
+                <th>{{order.size}}</th>
+                <th>{{order.customer.name}}</th>
+                <th>{{order.customer.email}}</th>
+                <th>{{order.customer.telephone}}</th>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
