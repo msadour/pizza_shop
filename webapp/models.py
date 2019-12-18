@@ -21,6 +21,16 @@ class Customer(models.Model):
                     return Order.objects.all()
             return Order.objects.all()
 
+    def order_pizza(self, **kwargs):
+        pizza = Pizza.objects.get(type=kwargs.get('type'))
+        size = kwargs.get('size')
+        new_order = Order(pizza=pizza, size=size, customer=self)
+        new_order.save()
+        return new_order
+
+    def clean_orders(self):
+        self.order_customer.all().delete()
+
 
 class Pizza(models.Model):
     type = models.CharField(max_length=200)

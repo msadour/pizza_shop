@@ -6,7 +6,8 @@ from django.shortcuts import render
 from .models import Customer, Pizza, Order
 from .forms import AuthenticationForm, CreateCustomerForm, PizzaForm, FilterOrderForm
 
-context = {"current_user": Customer.objects.get(username='msadour')}
+# context = {"current_user": Customer.objects.get(username='msadour')}
+context = {}
 #
 # def check_login(method):
 #     def wrapper(request, *args, **kwargs):
@@ -15,7 +16,10 @@ context = {"current_user": Customer.objects.get(username='msadour')}
 #         return method(request, *args, **kwargs)
 #     return wrapper
 
-def init_database():
+def init_database(request):
+    Customer.objects.all().delete()
+    Pizza.objects.all().delete()
+    Order.objects.all().delete()
     if platform.system() in ['Linux', 'Darwin']:
         slash = '/'
     else:
@@ -26,6 +30,8 @@ def init_database():
     for pizza in pizzas:
         new_pizza = Pizza(**pizza)
         new_pizza.save()
+    usertest = Customer(**json.load(open(path_pizzas_files))['usertest'])
+    usertest.save()
 
 def welcome(request, errors=[]):
     if len(Pizza.objects.all()) == 0:
@@ -66,10 +72,7 @@ def order_pizza(request):
     if request.method == "POST":
         form = PizzaForm(None, request.POST)
         if form.is_valid():
-            pizza = Pizza.objects.get(type=form.cleaned_data['type'])
-            size = form.cleaned_data['size']
-            new_order = Order(pizza=pizza, size=size, customer=context['current_user'])
-            new_order.save()
+            context['current_user'].order_pizza(**form.cleaned_data)
         return orders(request, 'mine')
 
 def orders(request, mine=None, filter=None):

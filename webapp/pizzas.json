@@ -3,6 +3,7 @@
     {"type": "Margherita"},
     {"type": "Salami"},
     {"type": "Diavolo"}
-  ]
+  ],
+  "usertest": {"username" : "usertest", "name": "test", "email": "test@gmail.com", "telephone": "01555555"}
 }
 
