@@ -1,0 +1,8 @@
+{
+  "pizzas": [
+    {"type": "Margherita"},
+    {"type": "Salami"},
+    {"type": "Diavolo"}
+  ]
+}
+
