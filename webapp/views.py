@@ -13,7 +13,7 @@ context = {}
 
 def check_user(views_function):
     def _decorated(*args, **kwargs):
-        if "current_user" not in context.keys():
+        if 'current_user' not in context.keys():
             return redirect('/')
         return views_function(*args, **kwargs)
 
@@ -33,7 +33,7 @@ def init_database(request):
     else:
         slash = '\\'
 
-    path_pizzas_files = os.getcwd() + slash + "webapp" + slash + "pizzas.json"
+    path_pizzas_files = os.getcwd() + slash + 'webapp' + slash + 'pizzas.json'
     pizzas = json.load(open(path_pizzas_files))['pizzas']
     for pizza in pizzas:
         new_pizza = Pizza(**pizza)
@@ -53,9 +53,14 @@ def welcome(request, errors=None):
     context['errors'] = errors
     context['form_username'] = AuthenticationForm()
     context['form_create_customer'] = CreateCustomerForm()
-    if "current_user" not in context.keys():
-        return render(request, 'webapp/welcome.html', context)
-    return list_pizza(request)
+    if 'current_user' not in context.keys():
+        return render(request, "webapp/welcome.html", context)
+    return redirect("/pizzas")
+
+def logout(request):
+    if 'current_user' in context.keys():
+        del context['current_user']
+    return redirect("/")
 
 def get_or_create_customer(request, action=""):
     """
@@ -64,24 +69,24 @@ def get_or_create_customer(request, action=""):
     :param action:
     :return:
     """
-    if request.method == "POST":
+    if request.method == 'POST':
         if action == 'create':
             form = CreateCustomerForm(request.POST)
             if form.is_valid():
-                if Customer.objects.filter(username=form.cleaned_data['username']).exists():
-                    return welcome(request, ["This username is already used."])
                 new_customer = Customer(**form.cleaned_data)
                 new_customer.save()
                 context['current_user'] = new_customer
+            else:
+                errors = [error[0] for error in form.errors.values()]
+                return welcome(request, errors)
         else:
             form = AuthenticationForm(request.POST)
             if form.is_valid():
-                username = form.cleaned_data['username']
-                if Customer.objects.filter(username=username).exists():
-                    context['current_user'] = Customer.objects.get(username=username)
-                else:
-                    return welcome(request, ["Username doesn\'t exist"])
-    return list_pizza(request)
+                context['current_user'] = Customer.objects.get(username=form.cleaned_data['username'])
+            else:
+                errors = [error[0] for error in form.errors.values()]
+                return welcome(request, errors)
+    return redirect("/pizzas")
 
 @check_user
 def list_pizza(request):
@@ -91,7 +96,7 @@ def list_pizza(request):
     :return:
     """
     context['pizza_forms'] = [PizzaForm(pizza) for pizza in Pizza.objects.all()]
-    return render(request, 'webapp/pizzas.html', context)
+    return render(request, "webapp/pizzas.html", context)
 
 def order_pizza(request):
     """
@@ -99,12 +104,12 @@ def order_pizza(request):
     :param request:
     :return:
     """
-    if request.method == "POST":
+    if request.method == 'POST':
         form = PizzaForm(None, request.POST)
         if form.is_valid():
             context['current_user'].order_pizza(**form.cleaned_data)
-        return orders(request, 'mine')
-    return list_pizza(request)
+        return redirect("/orders/mine")
+    return redirect("/pizzas")
 
 @check_user
 def orders(request, mine=None, filter_orders=None):
@@ -119,7 +124,7 @@ def orders(request, mine=None, filter_orders=None):
     context['form_filter'] = FilterOrderForm()
     context['orders'] = context['current_user'].get_orders(mine, filter_orders)
 
-    return render(request, 'webapp/orders.html', context)
+    return render(request, "webapp/orders.html", context)
 
 def filter_orders(request):
     """
@@ -127,7 +132,7 @@ def filter_orders(request):
     :param request:
     :return:
     """
-    if request.method == "POST":
+    if request.method == 'POST':
         form = FilterOrderForm(request.POST)
         if form.is_valid():
             return orders(request, False, form.cleaned_data)

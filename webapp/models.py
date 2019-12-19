@@ -18,7 +18,7 @@ class Customer(models.Model):
         """
         Get orders.
         :param mine:
-        :param filter_order:
+        :param filter_orders:
         :return:
         """
         if mine:

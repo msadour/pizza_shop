@@ -3,7 +3,7 @@ Urls.
 """
 from django.urls import path
 from .views import welcome, list_pizza, order_pizza, orders, \
-    get_or_create_customer, filter_orders, init_database
+    get_or_create_customer, filter_orders, init_database, logout
 
 
 urlpatterns = [
@@ -16,4 +16,5 @@ urlpatterns = [
     path('orders/<str:mine>', orders, name="orders"),
     path('orders', orders, name="orders"),
     path('filter_orders', filter_orders, name="filter_orders"),
+    path('logout', logout, name="logout"),
 ]

@@ -39,8 +39,8 @@ class TestOrder:
         assert len(self.customer.get_orders()) > 0 #all orders
         assert len(self.customer.get_orders(mine=True)) > 0 #order's usertest
         assert len(self.customer.get_orders(mine=False, filter_orders={
-            "criteria": 'email',
-            "key_word": 'test@gmail.com'
+            'criteria': 'email',
+            'key_word': 'test@gmail.com'
         })) > 0 #orders filtered
 
     def test_delete_order(self):
