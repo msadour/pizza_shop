@@ -5,11 +5,19 @@ import os
 import json
 import platform
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Customer, Pizza, Order
 from .forms import AuthenticationForm, CreateCustomerForm, PizzaForm, FilterOrderForm
 
 context = {}
+
+def check_user(views_function):
+    def _decorated(*args, **kwargs):
+        if "current_user" not in context.keys():
+            return redirect('/')
+        return views_function(*args, **kwargs)
+
+    return _decorated
 
 def init_database(request):
     """
@@ -30,7 +38,7 @@ def init_database(request):
     for pizza in pizzas:
         new_pizza = Pizza(**pizza)
         new_pizza.save()
-    usertest = Customer(**json.load(open(path_pizzas_files))['usertest'])
+    usertest = Customer(**json.load(open(path_pizzas_files))['usertest']) #Using for launch the tests
     usertest.save()
 
 def welcome(request, errors=None):
@@ -75,6 +83,7 @@ def get_or_create_customer(request, action=""):
                     return welcome(request, ["Username doesn\'t exist"])
     return list_pizza(request)
 
+@check_user
 def list_pizza(request):
     """
     Go the the pizzas pages.
@@ -97,6 +106,7 @@ def order_pizza(request):
         return orders(request, 'mine')
     return list_pizza(request)
 
+@check_user
 def orders(request, mine=None, filter_orders=None):
     """
     Go to the page of orders (all of them or order's user)
