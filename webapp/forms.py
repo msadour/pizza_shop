@@ -42,7 +42,7 @@ class AuthenticationForm(forms.Form):
     """
     Class AuthenticationForm.
     """
-    username = forms.CharField(label="", max_length=30, required=False)
+    username = forms.CharField(label="Username", max_length=30, required=False)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -57,6 +57,10 @@ class CreateCustomerForm(ModelForm):
         super(CreateCustomerForm, self).__init__(*args, **kwargs)
 
     def clean(self):
+        """
+        Check if the data in form are valid.
+        :return:
+        """
         cleaned_data = super().clean()
         pattern_mail = re.compile("[^@]+@[^@]+\.[^@]+")
         pattern_phone = re.compile("(\d{3}\d{3}\d{4})")

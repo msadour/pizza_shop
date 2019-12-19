@@ -3,10 +3,7 @@ Tests.
 """
 import os ; os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pizza_shop.settings")
 import django ; django.setup()
-
-
 from .models import Customer, Pizza
-
 
 
 class TestOrder:

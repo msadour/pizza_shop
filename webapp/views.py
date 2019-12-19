@@ -16,7 +16,6 @@ def check_user(views_function):
         if 'current_user' not in context.keys():
             return redirect('/')
         return views_function(*args, **kwargs)
-
     return _decorated
 
 def init_database(request):
@@ -33,12 +32,12 @@ def init_database(request):
     else:
         slash = '\\'
 
-    path_pizzas_files = os.getcwd() + slash + 'webapp' + slash + 'pizzas.json'
-    pizzas = json.load(open(path_pizzas_files))['pizzas']
-    for pizza in pizzas:
+    path_datas_files = os.getcwd() + slash + 'webapp' + slash + 'datas.json'
+    datas = json.load(open(path_datas_files))
+    for pizza in datas['pizzas']:
         new_pizza = Pizza(**pizza)
         new_pizza.save()
-    usertest = Customer(**json.load(open(path_pizzas_files))['usertest']) #Using for launch the tests
+    usertest = Customer(**datas['usertest']) #Using for launch the tests
     usertest.save()
 
 def welcome(request, errors=None):
@@ -114,7 +113,7 @@ def order_pizza(request):
 @check_user
 def orders(request, mine=None, filter_orders=None):
     """
-    Go to the page of orders (all of them or order's user)
+    Go to the page of orders (all of them or order's user).
     :param request:
     :param mine:
     :param filter_orders:
