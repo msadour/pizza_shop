@@ -16,3 +16,4 @@ For this project, I needed the followed technologies :
 * You can order a pizza by clicking on the menu "Pizzas in shop" ;
 * You can see your orders by clicking on the menu "My orders" ;
 * As you asked me, you can see all the orders by the following url : "**http://localhost:8000/orders/**", you can also filtered those orders.
+* For launch tests, use the the following command "pytest".
